@@ -1,4 +1,3 @@
-
 .circle {
     width: 25px;
     height: 25px;
@@ -10,14 +9,19 @@
 dialog {
     z-index: -1;
     overflow: visible;
-    border: 1px solid #191919;
+    border: 0;
     border-radius: 8px;
-    background: linear-gradient(#f1f7f4, #c3c9c1);
+    /* background: linear-gradient(#f1f7f4, #c3c9c1); */
+    background: transparent;
 }
+
 dialog::backdrop {
     background-color: #00000080;
 }
 
+.card {
+    background: linear-gradient(#f1f7f4, #c3c9c1);
+}
 
 select {
     z-index: 4;
