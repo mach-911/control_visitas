@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./assets/style.css">
+  <title>Control - Visitas</title>
+</head>
+
+<body>
+  <nav class="navbar bg-light bg-gradient shadow p-0 navbar-lg-expand">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="./assets/logo.png" alt="Bootstrap" width="65" height="65">
+      </a>
+      <div class="mx-auto fs-2 fw-bold">
+        Control Vehicular
+      </div>
+    </div>
+  </nav>
+  <div class="container my-5">
+    <h1 align="center"></h1>
+
+    <button class="btn btn-primary rounded-pill" onclick="{showModal()}">
+      <i class="fa fa-plus-circle fs-4"></i>
+      <span>Visita</span>
+    </button>
+    <table class="table my-4 table-bordered table-hover">
+      <thead>
+        <th><img src="./assets/icons/patente.png" alt="icon" height="15px"> PATENTE</th>
+        <th align="center"><i class="fa-solid fa-car"></i> COLOR</th>
+        <th><i class="fa-regular fa-building"></i> DEPTO</th>
+        <th><i class="fa-solid fa-clock"></i> INGRESO</th>
+        <th><i class="fa-solid fa-stopwatch"></i> HASTA</th>
+        <th><i class="fa-solid fa-hourglass-start"></i> RESTANTE</th>
+      </thead>
+      <tbody id="tbody-visita">
+      </tbody>
+    </table>
+
+
+    <dialog id="popup" class="w-50" style="z-index: 1;">
+      <div class="mb-3">
+        <button id="btn_popup" onclick="{popup.close()}" class="btn btn-danger"
+          style="top: -30px; z-index: 3">&times;</button>
+      </div>
+      <form action="" method="get" id="visita-form" class="card p-3">
+        <div class="input-group mb-3 rounded shadow-sm">
+          <label class="input-group-text bg-primary text-light" for="matricula">patente</label>
+          <input type="text" id="matricula" class="form-control" autocomplete="name" required>
+        </div>
+        <div class="input-group mb-3">
+          <label class="input-group-text bg-primary text-light" for="color">color</label>
+          <input type="color" id="color" list="colores" class="form-control form-control-color rounded-end">
+          <label class="input-group-text bg-primary text-light ms-2 rounded-start" for="ingreso">Ingreso</label>
+          <input type="datetime-local" id="ingreso" class="form-control">
+        </div>
+        <div class="input-group mb-3">
+          <label class="input-group-text bg-primary text-light" for="depto">Departamento</label>
+          <div class="form-control">
+            <select id="depto" placeholder="Seleccione">
+            </select>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-success">Agregar</button>
+        </div>
+      </form>
+    </dialog>
+
+
+    <datalist id="colores">
+      <!-- rojos -->
+      <option>#CB4335</option>
+      <option>#ff0000</option>
+      <option>#FDFEFE</option>
+      <option>#E67E22</option>
+      <!-- blancos -->
+      <option>#FDFEFE</option>
+      <option>#0000ff</option>
+      <option>#ffff00</option>
+      <!-- verdes -->
+      <option>#A2D9CE</option>
+      <option>#52BE80</option>
+      <option>#27AE60</option>
+      <option>#82E0AA</option>
+      <!-- oscuros -->
+      <option>#444444</option>
+      <option>#666666</option>
+      <option>#AAAAAA</option>
+    </datalist>
+
+  </div>
+  <script src="https://kit.fontawesome.com/6b8f0c7049.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <script>
+
+    $(document).ready(function () {
+      $('select').selectize({
+        sortField: 'text'
+      });
+    });
+    const h1 = document.querySelector("h1");
+    const patente = document.getElementById("patente");
+    const select_deptops = document.getElementById("depto");
+
+
+    for (let index = 0; index <= 2; index++) {
+      const BLOCK = ["A", "B", "C"];
+      for (let j = 1; j <= 5; j++) {
+        if (j == 1 || j == 2) {
+          for (let k = 1; k <= 10; k++) {
+            select_deptops.innerHTML += `
+                <option>${BLOCK[index]} ${j}${k <= 9 ? '0' + k : k}</option>
+                        `
+          }
+        } else {
+          for (let k = 1; k <= 12; k++) {
+            select_deptops.innerHTML += `
+                            <option>${BLOCK[index]} ${j}${k <= 9 ? '0' + k : k}</option>
+                        `
+          }
+        }
+      }
+    }
+
+
+    const getDate = () => {
+      const MESES = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+        "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+      ];
+      const DIAS = [
+        "Domingo", "Lunes", "Martes", "Miércoles",
+        "Jueves", "Viernes", "Sábado"
+      ]
+      const date = new Date(Date.now());
+
+      return DIAS[date.getDay()] + ', ' + date.getDate() + ' de ' + MESES[date.getUTCMonth()]
+    }
+
+    setInterval(() => {
+      h1.textContent = getDate();
+    }, 60000)
+
+    h1.textContent = getDate();
+    const showModal = () => {
+      document.getElementById("popup").showModal();
+      const dt = new Date();
+      dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+      console.log(dt.toISOString().slice(0, 16)); // '2022-10-16T04:45'
+      document.getElementById("ingreso").value = dt.toISOString().slice(0, 16)
+    }
+
+  </script>
+  <script src="./App.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+
+.circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: blue;
+    border: 2px solid rgb(0, 0, 0);
+}
+
+dialog {
+    z-index: -1;
+    overflow: visible;
+    border: 1px solid #191919;
+    border-radius: 8px;
+    background: linear-gradient(#f1f7f4, #c3c9c1);
+}
+dialog::backdrop {
+    background-color: #00000080;
+}
+
+
+select {
+    z-index: 4;
+}
