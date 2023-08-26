@@ -1,9 +1,31 @@
-.circle {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
+body {
+    background: linear-gradient(#fff, #ffffff99), url('./logo.png');
+    background-size: 600px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.table {
+    box-shadow: 2px 2px 5px 1px;
+}
+.color {
+    width: 18px;
+    height: 18px;
+    border-radius: 8px;
     background-color: blue;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid rgba(0, 0, 0, .15);
+    vertical-align: middle;
+}
+
+.patente {
+    text-transform: uppercase;
+    font-weight: 500;
+    background: #eee;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    padding: 0 8px;
+    vertical-align: middle;
 }
 
 dialog {
@@ -23,6 +45,23 @@ dialog::backdrop {
     background: linear-gradient(#f1f7f4, #c3c9c1);
 }
 
-select {
+.form-select {
+    --bs-form-select-bg-img: #fff;
+    padding: 5px 5px 0 5px;
+}
+
+select#tipo_visita {
     z-index: 4;
+}
+
+i.peaton {
+    font-family: fontAwesome;
+    background-color: red;
+    height: 30px;
+}
+
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
 }

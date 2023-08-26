@@ -1,0 +1,28 @@
+@media print {
+    @media print {
+        @page {
+            size: landscape;
+        }
+        @page rotated {
+            page-orientation: rotate-left;
+        }
+        div {
+            overflow: hidden;
+        }
+        body {
+            margin: 0;
+            font-size: 2em;
+        }
+        #group-btn-add-and-reset{
+            display: none;
+            visibility: hidden;
+        }
+        .landscape {
+            page: rotated;
+            transform-origin: top left;
+            transform: translateX(100vw) rotate(90deg);
+            width: 100vh;
+            height: 100vw;
+        }
+    }
+}

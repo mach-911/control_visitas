@@ -1,70 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8"/>
-    <title>ejemplo contador regresivo</title>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./assets/style.css">
+  <title>Control - Visitas</title>
+</head>
 
-    <!-- Contador regresivo -->
-    <section>
-        <p>
-            <span id="days"></span> días / <span id="hours"></span> horas / <span id="minutes"></span> minutos / <span id="seconds"></span> segundos
-        </p>
-    </section> 
-    <!-- Fin contador regresivo -->
+<body>
+  <nav class="navbar bg-light bg-gradient shadow p-0 navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="./assets/logo.png" alt="Bootstrap" width="65" height="65">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="mx-auto fs-5 fw-bold">
+        Control de Visitas
+      </div>
+      <div class="collapse navbar-collapse" id="main-navbar">
+        <div class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <a href="#peatones" class="nav-link">Peatones</a>
+          <a href="#vehoculos" class="nav-link">Vehículos</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container my-5">
+    <h1 align="center"></h1>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => { 
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-primary rounded-pill" onclick="{showModal()}">
+        <i class="fa fa-plus-circle fs-4"></i>
+        <span>Visita</span>
+      </button>
+      <button class="btn btn-secondary" onclick="{localStorage.clear(); location.reload()}">Resetear visitas</button>
+    </div>
+    <table class="table my-4 table-bordered table-hover">
+      <thead>
+        <th><i class="fa-solid fa-id-card-clip"></i> TIPO DE VISITA</th>
+        <th align="center"><i class="fa-solid fa-car"></i> COLOR</th>
+        <th><i class="fa-regular fa-building"></i> DEPTO</th>
+        <th><i class="fa-solid fa-clock"></i> INGRESO</th>
+        <th><i class="fa-solid fa-stopwatch"></i> HASTA</th>
+        <th><i class="fa-solid fa-hourglass-start"></i> RESTANTE</th>
+      </thead>
+      <tbody id="tbody-visita">
+      </tbody>
+    </table>
 
-        //===
-        // VARIABLES
-        //===
-        const DATE_TARGET = new Date('04/13/2021 0:01 AM');
-        // DOM for render
-        const SPAN_DAYS = document.querySelector('span#days');
-        const SPAN_HOURS = document.querySelector('span#hours');
-        const SPAN_MINUTES = document.querySelector('span#minutes');
-        const SPAN_SECONDS = document.querySelector('span#seconds');
-        // Milliseconds for the calculations
-        const MILLISECONDS_OF_A_SECOND = 1000;
-        const MILLISECONDS_OF_A_MINUTE = MILLISECONDS_OF_A_SECOND * 60;
-        const MILLISECONDS_OF_A_HOUR = MILLISECONDS_OF_A_MINUTE * 60;
-        const MILLISECONDS_OF_A_DAY = MILLISECONDS_OF_A_HOUR * 24
+    <dialog id="popup" class="w-100" style="z-index: 1;">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6 border card p-3">
+          <div class="mb-3">
+            <button id="btn_popup" onclick="{popup.close()}" class="btn btn-danger"
+              style="top: -30px; z-index: 3">&times;</button>
+          </div>
+          <form action="" method="get" id="visita-form">
+            <div class="input-group mb-3 rounded shadow-sm">
+              <label class="input-group-text bg-primary text-light" for="matricula">tipo de visita</label>
+              <select id="tipo_visita" class="form-control form-select">
+                <option value="1"><i class="peaton">&#xf183;</i> Peatón</option>
+                <option value="2">vehículo</option>
+              </select>
+            </div>
+            <div class="input-group mb-3 rounded shadow-sm">
+              <label class="input-group-text bg-secondary text-light" for="matricula">patente</label>
+              <input type="text" id="matricula" class="form-control" autocomplete="name" disabled="true">
+            </div>
+            <div class="input-group mb-3">
+              <label class="input-group-text bg-primary text-light" for="color">color</label>
+              <input type="color" id="color" list="colores" class="form-control form-control-color rounded-end">
+              <label class="input-group-text bg-primary text-light ms-2 rounded-start" for="ingreso">Ingreso</label>
+              <input type="datetime-local" id="ingreso" class="form-control">
+            </div>
+            <div class="input-group mb-3">
+              <label class="input-group-text bg-primary text-light" for="depto">Departamento</label>
+              <div class="form-control">
+                <select id="depto" placeholder="Seleccione">
+                </select>
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-success">Agregar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </dialog>
 
-        //===
-        // FUNCTIONS
-        //===
+    <datalist id="colores">
+      <!-- rojos -->
+      <option>#CB4335</option>
+      <option>#ff0000</option>
+      <option>#FDFEFE</option>
+      <option>#E67E22</option>
+      <!-- blancos -->
+      <option>#FDFEFE</option>
+      <option>#0000ff</option>
+      <option>#ffff00</option>
+      <!-- verdes -->
+      <option>#A2D9CE</option>
+      <option>#52BE80</option>
+      <option>#27AE60</option>
+      <option>#82E0AA</option>
+      <!-- oscuros -->
+      <option>#444444</option>
+      <option>#666666</option>
+      <option>#AAAAAA</option>
+    </datalist>
 
-        /**
-        * Method that updates the countdown and the sample
-        */
-        function updateCountdown() {
-            // Calcs
-            const NOW = new Date()
-            const DURATION = DATE_TARGET - NOW;
-            const REMAINING_DAYS = Math.floor(DURATION / MILLISECONDS_OF_A_DAY);
-            const REMAINING_HOURS = Math.floor((DURATION % MILLISECONDS_OF_A_DAY) / MILLISECONDS_OF_A_HOUR);
-            const REMAINING_MINUTES = Math.floor((DURATION % MILLISECONDS_OF_A_HOUR) / MILLISECONDS_OF_A_MINUTE);
-            const REMAINING_SECONDS = Math.floor((DURATION % MILLISECONDS_OF_A_MINUTE) / MILLISECONDS_OF_A_SECOND);
-            // Thanks Pablo Monteserín (https://pablomonteserin.com/cuenta-regresiva/)
+  </div>
+  <script src="https://kit.fontawesome.com/6b8f0c7049.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <script>
 
-            // Render
-            SPAN_DAYS.textContent = REMAINING_DAYS;
-            SPAN_HOURS.textContent = REMAINING_HOURS;
-            SPAN_MINUTES.textContent = REMAINING_MINUTES;
-            SPAN_SECONDS.textContent = REMAINING_SECONDS;
-        }
+    const h1 = document.querySelector("h1");
+    const patente = document.getElementById("matricula");
+    const tipo_visita = document.getElementById("tipo_visita");
+    tipo_visita.onchange = (e) => {
+      e.target.value === "2" ? patente.disabled = false : patente.disabled = true
+    }
 
-        //===
-        // INIT
-        //===
-        updateCountdown();
-        // Refresh every second
-        setInterval(updateCountdown, MILLISECONDS_OF_A_SECOND);
-    });
-    </script>
-  </body>
+    const getDate = () => {
+      const MESES = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+        "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+      ];
+      const DIAS = [
+        "Domingo", "Lunes", "Martes", "Miércoles",
+        "Jueves", "Viernes", "Sábado"
+      ]
+      const date = new Date(Date.now());
+
+      return DIAS[date.getDay()] + ', ' + date.getDate() + ' de ' + MESES[date.getUTCMonth()]
+    }
+
+    setInterval(() => {
+      h1.textContent = getDate();
+    }, 60000)
+
+    h1.textContent = getDate();
+    const showModal = () => {
+      document.getElementById("popup").showModal();
+      const dt = new Date();
+      dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+      // console.log(dt.toISOString().slice(0, 16)); // '2022-10-16T04:45'
+      document.getElementById("ingreso").value = dt.toISOString().slice(0, 16)
+    }
+
+  </script>
+  <script src="./App.js"></script>
+</body>
+
 </html>
-

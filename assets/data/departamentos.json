@@ -1,0 +1,18 @@
+{
+    "A 101": {
+        "propietario": "Eduardo Omar Claveria Vivanco",
+        "anexo": true
+    },
+    "A 102": {
+        "propietario": "Humberto Segundo Guerra Cepeda",
+        "anexo": true
+    },
+    "A 103": {
+        "propietario": "Nasib Majmut Ampuero",
+        "anexo": false
+    },
+    "A 104": {
+        "propietario": "Gonzalo Abelardo Zamorano Gonzalez",
+        "anexo": true
+    }
+}

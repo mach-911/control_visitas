@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>indexedDB</title>
+</head>
+<body>
+    <script>
+        var bd;
+        const customers = [{
+            name: "emilio",
+            phone: "+56984687949"
+        },{
+            name: "pedro",
+            phone: "+56978653412"
+        }]
+
+        function comenzar(evento) {
+            
+        }
+
+        function iniciarBaseDeDatos(){
+            const request = indexedDB.open("control-de-visitas");
+            request.addEventListener("error", mostrarError);
+            request.addEventListener("success", comenzar);
+            request.addEventListener("upgradeneeded", crearAlmacen);
+        }
+
+    
+        function mostrarError(evento) {
+            alert("Tenemos un error: " + evento.code + " / " + evento.message)
+        }
+        window.addEventListener("load", iniciarBaseDeDatos)
+    </script>
+</body>
+</html>
