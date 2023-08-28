@@ -1,5 +1,4 @@
-// CHARGE DATA
-export function cargarDatosDepartamentos() {
+export function cargarDepartamentos() {
     const select_deptops = document.getElementById("depto");
     for (let index = 0; index <= 2; index++) {
         const BLOCK = ["A", "B", "C"];

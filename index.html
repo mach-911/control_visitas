@@ -16,6 +16,10 @@
   <link rel="stylesheet" href="./assets/style.css">
   <link rel="stylesheet" href="./assets/print.css">
   <link rel="shortcut icon" href="favicon.png" type="image/png">
+  <!-- Exportar a excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- Estilos excel -->
+  <script src="libs/xlsx_style.js"></script>
   <title>Control - Visitas</title>
 </head>
 
@@ -35,7 +39,6 @@
       <div class="collapse navbar-collapse" id="main-navbar">
         <div class="navbar-nav ms-auto mb-2 mb-lg-0">
           <a href="propietarios.html" class="nav-link" target="_parent">Propietarios</a>
-          <!-- <a href="#vehoculos" class="nav-link">Vehículos</a> -->
         </div>
       </div>
     </div>
@@ -47,8 +50,8 @@
         <i class="fa fa-plus-circle fs-4"></i>
         <span>Visita</span>
       </button>
-      <button class="btn btn-success ms-auto me-3" id="btn_csv">CSV</button>
-      <button class="btn btn-secondary" onclick="{localStorage.clear(); location.reload()}">Resetear visitas</button>
+      <button class="btn btn-success ms-auto me-3" id="btn_excel">Exportar a Excel</button>
+      <button class="btn btn-secondary" id="btn_reset">Resetear visitas</button>
     </div>
     <table class="table my-4 table-bordered table-hover landscape">
       <thead class="table-success">
@@ -115,7 +118,7 @@
             <!-- PATENTE -->
             <div class="input-group mb-3 rounded shadow-sm d-none" id="div_patente">
               <label class="input-group-text bg-primary text-light" for="matricula">patente</label>
-              <input type="text" id="matricula" class="form-control" autocomplete="on" placeholder="Ej: DC8L78">
+              <input type="text" minlength="6" maxlenght="6" id="matricula" class="form-control" autocomplete="on" placeholder="Ej: DC8L78">
             </div>
             <!-- COLOR -->
             <div class="input-group mb-3 d-none" id="div_color">
@@ -130,6 +133,18 @@
                 </select>
               </div>
             </div>
+            <!-- OBSERVACIONES (Motivo) -->
+            <div class="input-group mb-3 rounded shadow-sm">
+              <label class="input-group-text bg-primary text-light" for="motivo">motivo</label>
+              <select id="motivo" class="form-control form-select">
+                <option value="visita" selected>Visita</option>
+                <option value="aseo">Aseo</option>
+                <option value="carabineros">Carabineros</option>
+                <option value="salud">Salud</option>
+                <option value="remodelación">Remodelación</option>
+              </select>
+            </div>
+            <!-- INGRESO -->
             <div class="input-group mb-3">
                 <label class="input-group-text bg-primary text-light" for="ingreso">Ingreso</label>
               <input type="datetime-local" id="ingreso" class="form-control">
@@ -194,6 +209,7 @@
     }
 
   </script>
+  <script src="./libs/filesaver.js"></script>
   <script src="./App.js" type="module"></script>
 </body>
 

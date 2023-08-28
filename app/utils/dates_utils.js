@@ -16,4 +16,3 @@ export function getTodayDate() {
        h1.textContent = today;
     }, 60000)
 }
-

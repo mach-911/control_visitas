@@ -1,10 +1,8 @@
-export function obtenerNombres(rut) {
+export function libreApiGetNames(rut) {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
       };
-      // https://api.libreapi.cl/rut/activities?rut=${rut}
-      // https://api.rutify.cl/rut/:rut
     return fetch(`https://api.libreapi.cl/rut/activities?rut=${rut}`, requestOptions)
         .then(response => response.json())
         .then(result =>  {
