@@ -90,4 +90,30 @@ export class Database {
 		}
 	}
 
+	deleteById(id) {
+		this.request.onsuccess = (event) => {
+     		const db = event.target.result;
+			// Create a new transaction
+			const txn = db.transaction('visitas', 'readwrite');
+
+			// get the object store
+			const store = txn.objectStore('visitas');
+
+			let query = store.delete(id);
+
+			query.onerror = (event) => {
+				console.log(event.target.errorCode)
+			}
+
+			query.onsuccess = (event) => { 
+				console.log(event);
+			}
+			// close database once the
+			// transaction completes
+			txn.oncomplete = () => { 
+				db.close();
+			}
+		}
+	}
+
 }

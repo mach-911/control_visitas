@@ -17,16 +17,23 @@ export class UI {
         const element = document.createElement('tr');
         element.title = visita.motivo;
         element.classList.add('fw-medium');
+        element.style.cursor = 'pointer';
+        element.onclick = () => {
+           window.open(`https://www.rutificador.co/rut/buscar/?f=${visita.rut}`, '_blank', 'fullscreen=yes,menubar=no,location=no,scrollbars=no,resizable=1')
+        }
+        element.oncontextmenu = (event) => {
+          event.preventDefault();
+        };
         element.innerHTML = `
-          <!-- mostrar el nombre de la visita -->  
+          <!-- mostrar el nombre de la visita -->
           <td class="text-capitalize fit">${visita.nombre}</td>
-          <!-- mostrar el rut de la visita -->  
+          <!-- mostrar el rut de la visita -->
           <td>${visita.rut}</td>
           <!-- mostramos la patente y color del vehículo o si es peaton -->
           <td class="text-center">
              ${ visita.matricula === "peaton"
                 ? `<i class="fa-solid fa-person-walking"></i> PEATÓN`
-                : `<span class="patente">${visita.matricula.substring(0, 2)}·${visita.matricula.substring(2, 4)}<img src="./assets/icons/patente.png" alt="icon" height="7px">${visita.matricula.substring(4, 6)}</span> 
+                : `<span class="patente">${visita.matricula.substring(0, 2)}·${visita.matricula.substring(2, 4)}<img src="./assets/icons/patente.png" alt="icon" height="7px">${visita.matricula.substring(4, 6)}</span>
                 <div class="color d-inline-block" style='background:${visita.color}'></div>`
              }
           </td>
@@ -38,8 +45,8 @@ export class UI {
             dateStyle: "short"
           }).format(new Date(visita.ingreso))}</td>
           <!-- mostrar la fecha y hora hasta que hora tiene permitido -->
-          <td class="fit">${ visita.matricula === "peaton" 
-            ? '<div class="text-center">//</div>' 
+          <td class="fit">${ visita.matricula === "peaton"
+            ? '<div class="text-center">//</div>'
             : new Intl.DateTimeFormat(undefined, {
                 timeStyle: "medium",
                 dateStyle: "short"
@@ -57,7 +64,7 @@ export class UI {
             `
             tbody_visita.appendChild(element);
             const temporizador = new Temporizador(visita.ingreso);
-            temporizador.temporizar(visita.matricula);   
+            temporizador.temporizar(visita.matricula);
         }
     }
     cleanBox() {

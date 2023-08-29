@@ -24,7 +24,8 @@
 </head>
 
 <body>
-  <nav class="navbar bg-light bg-gradient shadow p-0 navbar-expand-lg">
+  <!-- navigation -->
+  <nav class="navbar shadow p-0 navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="#">
         <img src="./assets/logo.png" alt="Bootstrap" width="65" height="65">
@@ -38,11 +39,12 @@
       </div>
       <div class="collapse navbar-collapse" id="main-navbar">
         <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <a href="propietarios.html" class="nav-link" target="_parent">Propietarios</a>
+          <!-- <a href="propietarios.html" class="nav-link" target="_parent">Propietarios</a> -->
         </div>
       </div>
     </div>
   </nav>
+
   <div class="container my-5">
     <h1 align="center" class="h3"></h1>
     <div class="d-flex justify-content-between" id="group-btn-add-and-reset">
@@ -56,6 +58,7 @@
     <table class="table my-4 table-bordered table-hover landscape">
       <thead class="table-success">
         <!-- encabezados -->
+        <!-- <th>Acciones</th> -->
         <th class="fit"><i class="fa-solid fa-user"></i> NOMBRE VISITA</th>
         <th class="fit"><i class="fa-solid fa-id-card-clip"></i> RUT</th>
         <th class="text-center fit"><i class="fa-solid fa-car"></i> PATENTE <span class="fw-light">|</span> COLOR</th>
@@ -65,7 +68,11 @@
         <th class="fit"><i class="fa-solid fa-hourglass-start"></i> RESTANTE</th>
       </thead>
       <tbody id="tbody-visita">
-<!--           <tr onclick="{ window.open('card', '_blank', 'fullscreen=yes,menubar=no,location=no,scrollbars=no')}" style="cursor: pointer;">
+ <!--          <tr onclick="{ window.open(`https://www.rutificador.co/rut/buscar/?f=${'20.448.621-1'}`, '_blank', 'fullscreen=yes,menubar=no,location=no,scrollbars=no,resizable=1')}" style="cursor: pointer;">
+              <td>
+                <a href="#">eliminar</a>
+                <a href="#">editar</a>
+              </td>
               <td class="text-capitalize fw-semibold" style="width: 12rem;">Marco contreras</td>
               <td class="text-capitalize fw-medium fit">17.797.793-4</td>
               <td class="text-center"><span class="patente">tx·op<img src="./assets/icons/patente.png" alt="icon" height="6px">98</span> <div class="color ms-2 d-inline-block" style='background:#549'></div></td>
@@ -83,7 +90,7 @@
             <td class="text-uppercase fw-medium">13/8/23, 1:36:00</td>
             <td class="text-uppercase fw-medium text-center">//</td>
             <td class="text-uppercase fw-medium text-center">//</td>
-        </tr>  -->         
+        </tr>  -->
       </tbody>
     </table>
     <!-- POPUP -->

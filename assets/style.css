@@ -6,6 +6,10 @@ body {
     background-attachment: fixed;
 }
 
+nav {
+  background: #33933320;
+}
+
 .table {
     box-shadow: 2px 2px 5px 1px;
 }
@@ -60,7 +64,7 @@ i.peaton {
     height: 30px;
 }
 
-.table td.fit, 
+.table td.fit,
 .table th.fit {
     white-space: nowrap;
     width: 1%;
