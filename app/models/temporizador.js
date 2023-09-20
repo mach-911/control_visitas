@@ -20,15 +20,20 @@ export class Temporizador {
         const hours = Math.floor((distance % this.day) / this.hour);
         const minutes = Math.floor((distance % this.hour) / this.minute);
         const seconds = Math.floor((distance % this.minute) / this.second);
-        // console.log(this.formatTime(hours), ':', this.formatTime(minutes), ':', this.formatTime(seconds));
-        // console.log(distance);
         return `${this.formatTime(hours)}:${this.formatTime(minutes)}:${this.formatTime(seconds)}`;
     };
 
-    temporizar(matricula) {
-    setInterval(() => {
-            this.restante = this.getTime()
-            document.getElementById(matricula).textContent = this.restante
-        }, 1000);
+    temporizar(domElement) {
+      let temporizadorId = setInterval(() => {
+        this.restante = this.getTime()
+        domElement.textContent = this.restante
+        if (new Date(Date.now()) > this.final) {
+            domElement.classList.add('text-bg-danger');
+        }
+      }, 1000);
+    }
+
+    detener(temporizadorId) {
+        clearInterval(temporizadorId)
     }
 }

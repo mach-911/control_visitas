@@ -3,12 +3,14 @@ import { Temporizador } from "../models/temporizador.js";
 
 export class UI {
     home() {
+      let container = document.getElementById('main_container');
       const db = new Database();
       db.getAll().then(res => {
-        console.log(res);
-        res.forEach(item => {
-          this.agregarVisita(item);
-        })
+        if (res.length != 0) {
+          res.forEach(item => {
+              this.agregarVisita(item);
+          })
+        }
       })
     }
 
@@ -19,19 +21,21 @@ export class UI {
         element.classList.add('fw-medium');
         element.style.cursor = 'pointer';
         element.onclick = () => {
-           window.open(`https://www.rutificador.co/rut/buscar/?f=${visita.rut}`, '_blank', 'fullscreen=yes,menubar=no,location=no,scrollbars=no,resizable=1')
+          this.showPopup(visita)
         }
         element.oncontextmenu = (event) => {
           event.preventDefault();
         };
-        element.innerHTML = `
+
+
+        element.innerHTML = /*html*/`
           <!-- mostrar el nombre de la visita -->
           <td class="text-capitalize fit">${visita.nombre}</td>
           <!-- mostrar el rut de la visita -->
           <td>${visita.rut}</td>
           <!-- mostramos la patente y color del vehículo o si es peaton -->
           <td class="text-center">
-             ${ visita.matricula === "peaton"
+             ${ visita.matricula === "peatón"
                 ? `<i class="fa-solid fa-person-walking"></i> PEATÓN`
                 : `<span class="patente">${visita.matricula.substring(0, 2)}·${visita.matricula.substring(2, 4)}<img src="./assets/icons/patente.png" alt="icon" height="7px">${visita.matricula.substring(4, 6)}</span>
                 <div class="color d-inline-block" style='background:${visita.color}'></div>`
@@ -45,7 +49,7 @@ export class UI {
             dateStyle: "short"
           }).format(new Date(visita.ingreso))}</td>
           <!-- mostrar la fecha y hora hasta que hora tiene permitido -->
-          <td class="fit">${ visita.matricula === "peaton"
+          <td class="fit">${ visita.matricula === "peatón"
             ? '<div class="text-center">//</div>'
             : new Intl.DateTimeFormat(undefined, {
                 timeStyle: "medium",
@@ -53,7 +57,7 @@ export class UI {
             }).format(new Date(visita.ingreso).getTime() + 18000000)}</td>
         `;
 
-        if (visita.matricula === "peaton") {
+        if (visita.matricula === "peatón") {
             element.innerHTML += `
             <td><div class="text-center">//</div></td>
             `
@@ -64,7 +68,7 @@ export class UI {
             `
             tbody_visita.appendChild(element);
             const temporizador = new Temporizador(visita.ingreso);
-            temporizador.temporizar(visita.matricula);
+            temporizador.temporizar(document.getElementById(visita.matricula));
         }
     }
     cleanBox() {
@@ -74,12 +78,15 @@ export class UI {
         document.getElementById("btn_popup").click()
     }
     // delete
-    eliminarVisita(element) {
-        if (element.name === 'delete' && confirm('¿Estás seguro de retirar a esta visita?')) {
-            element.parentElement.parentElement.parentElement.remove();
-            this.showMessage('Producto eliminado exitosamente', 'warning')
+    eliminarVisita(id) {
+        if (confirm('¿Estás seguro de retirar a esta visita?')) {
+          alert(id)
+            // element.parentElement.parentElement.parentElement.remove();
+            // this.showMessage('Producto eliminado exitosamente', 'warning')
         }
     }
+
+
     // messages
     showMessage(message, contextClass) {
         const div = document.createElement('div');
@@ -93,4 +100,88 @@ export class UI {
             document.querySelector('.alert').remove();
         }, 2000);
     }
+
+    showPopup(visita) {
+      let left = (screen.width/2)-(460/2);
+      let top = (screen.height/2)-(460/2);
+      let params = `directories=no,scrollbars=0,resizable=1,status=0,location=no,toolbar=0,menubar=1,width=460,height=460,left=${left},top=${top}`;
+      const popup = open('', '_blank', params);
+      popup.focus()
+      popup.document.write(`
+        <style>* {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: sans-serif;
+         }
+         body {
+          background: radial-gradient(#fff, #ddd 65%, #99bE9E 10%, #ddd);
+          padding: 30px 0;
+          display: flex;
+          min-height: 100vh;
+          flex-flow: column nowrap;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          color: #292929;
+         }
+         hr {
+          background: #ccc;
+          border: 0;
+          height: 3px;
+          width: 80%;
+         }
+         button {
+          border: none;
+          padding: 7px 10px;
+          border-radius: 8px;
+          font-size: 18px;
+          cursor: pointer;
+         }
+         button.editar {
+          background: #f7b620;
+         }
+         button.eliminar {
+          background: #f74640;
+         }
+        </style>`)
+      const db = new Database();
+      popup.document.write(`<title>${visita.nombre}</title>`)
+      popup.document.write(`<h1>${visita.motivo}</h1>`)
+      popup.document.write(`<h2 align='center'>${visita.nombre}</h2>`)
+      popup.document.write(`<hr>`)
+      popup.document.write(`<h3>${visita.rut}</h3>`)
+      popup.document.write(`<h3 id=${visita.matricula}></h3>`)
+      popup.document.write(`<button type='button' class='close' onclick='window.close()'>Cerrar</button>`)
+      // popup.document.write(`<button type='button' class='eliminar'>Eliminar</button>`)
+      // popup.document.write(`<script>
+      //   document.querySelector('.eliminar').addEventListener('click', () => {
+      //     const request = indexedDB.open('visitas', 1);
+      //         request.onsuccess = (event) => {
+      //         const db = event.target.result;
+      //         // Create a new transaction
+      //         const txn = db.transaction('visitas', 'readwrite');
+
+      //         // get the object store
+      //         const store = txn.objectStore('visitas');
+
+      //         let query = store.delete(${visita.rut});
+      //         query.onerror = (event) => {
+      //           console.log(event.target.errorCode)
+      //         }
+
+      //         query.onsuccess = (event) => {
+      //           console.log(event);
+      //         }
+      //         // close database once the
+      //         // transaction completes
+      //         txn.oncomplete = () => {
+      //           db.close();
+      //         }
+      //       }
+      //     })
+      //   </script>`)
+
+    }
+
 }

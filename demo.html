@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Demo IndexeDB</title>
+</head>
+<body>
+
+<form name="form1">
+	<input type="hidden" name="created" id="clave">
+	<input type="text" placeholder="nombre" name="nombre" id="nombre"><br><br>
+	<input type="text" placeholder="direccion" name="direccion" id="direccion"><br><br>
+	<button type="button" id="submit">Agregar</button>
+</form>
+
+<div id="zona_datos">
+
+</div>
+	<script>
+		var request;
+
+		function mostrarDatos() {
+			console.log("Mostrando datos")
+			const zona_datos = document.getElementById('zona_datos');
+			const objectStore = request.result
+				.transaction(["gente"])
+				.objectStore("gente")
+
+			objectStore.openCursor().onsuccess = (e) => {
+				const cursor = e.target.result;
+				let html = "";
+				if (cursor) {
+					console.log("Clave", cursor.key, "Valor", cursor.value.nombre);
+					html += `
+					<p>${cursor.value.nombre}</p>
+					`
+					cursor.continue()
+				} else {
+					alert("No hay más registros");
+					zona_datos.innerHTML = html
+				}
+			}
+		}
+
+		function agregarObjeto() {
+				const txn = request.result.transaction(["gente"], "readwrite");
+				const store = txn.objectStore("gente");
+				const query = store.add({
+					id: Date.now(),
+					nombre: document.getElementById('nombre').value,
+					direccion: document.getElementById('direccion').value
+				})
+
+				query.onsuccess = (e) => {
+					console.log("Añadido con exito", e.target.result);
+					document.form1.reset();
+					mostrarDatos();
+				}
+				query.oncomplete = (e) => {
+					db.close()
+				}
+		}
+
+		function iniciar() {
+			request = indexedDB.open('mibasedemo', 1)
+			request.onupgradeneeded = (e) => {
+				const db = e.target.result;
+				db.createObjectStore('gente', {keyPath: "id"})
+			}
+
+			request.onsuccess = (e) => {
+				console.log('Database ok')
+				// handle
+				const botonSubmit = document.getElementById('submit');
+				botonSubmit.addEventListener("click", agregarObjeto, false);
+			}
+		}
+		window.addEventListener('load', iniciar, false);
+	</script>
+</body>
+</html>

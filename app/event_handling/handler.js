@@ -2,9 +2,23 @@ import { Database } from "../db/database.js";
 import { downloadAsExcel } from "../utils/export_as_excel.js";
 import { libreApiGetNames } from "../utils/apis.js";
 import { Visita } from "../models/visita.js";
-import { UI } from "../models/ui.js";
+import { darFormatoRUT } from "../utils/format.js";
+import { UI } from "../models/ui.js"
 
 export function activate_events() {
+
+  document.getElementById('btn_modal').addEventListener('click', () => {
+    document.getElementById('modal').showModal();
+      const ingreso = document.getElementById("ingreso");
+      const dt = new Date();
+      dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+      ingreso.value = dt.toISOString().slice(0, 16)
+      ingreso.min = dt.toISOString().slice(0, 11) + '00:00'
+      ingreso.max = dt.toISOString().slice(0, 16)
+  })
+  document.getElementById('nombre').oninput = (e) => {
+    e.target.value = e.target.value.toLowerCase();
+  }
 
 	document.getElementById('visita-form')
     .addEventListener('submit', function (e) {
@@ -18,7 +32,7 @@ export function activate_events() {
         const depto = document.getElementById('depto').value; // depto ingresado
         const motivo = document.getElementById('motivo').value; // motivo ingresado
         const ingreso = document.getElementById('ingreso').value; // hora ingreso
-        
+
         db.getAll().then(res => {
           // verificamos si la pantente ya existe en los registros
           if (res.some(vta => vta.matricula == matricula.value.toUpperCase())) {
@@ -26,7 +40,7 @@ export function activate_events() {
             matricula.select();
             return alert(`Ya existe la patente ${matricula.value} en el registro`)
           }
-          // verificamos si el rut ya existe en los registros 
+          // verificamos si el rut ya existe en los registros
           else if (res.some(vta => vta.rut == rut.value)) {
             rut.focus();
             rut.select();
@@ -34,7 +48,7 @@ export function activate_events() {
           }
           else {
             if (tipo_visita.value === "1") {
-              matricula.value = "peaton";
+              matricula.value = "peatón";
             } else {
               // verificamos que la matricula sea vacía
               if (matricula.value === "") {
@@ -51,9 +65,11 @@ export function activate_events() {
             ui.cleanBox();
             ui.showMessage('Visita añadida exitosamente', 'success');
           }
-        }) 
+        })
     });
 
+  // Editar registro
+  document.getElementById('editar');
 	// Reset database
 	document.getElementById('btn_reset').addEventListener('click', () => {
 	  const db = new Database();
@@ -90,22 +106,10 @@ export function activate_events() {
     	  // alert("desconocido")
   	}
 	}
-	// format rut 
-	document.getElementById('rut').addEventListener('input', function(evt) {
-  let value = this.value.replace(/\./g, '').replace('-', '');
-  
-  if (value.match(/^(\d{2})(\d{3}){2}(\w{1})$/)) {
-    value = value.replace(/^(\d{2})(\d{3})(\d{3})(\w{1})$/, '$1.$2.$3-$4');
-  }
-  else if (value.match(/^(\d)(\d{3}){2}(\w{0,1})$/)) {
-    value = value.replace(/^(\d)(\d{3})(\d{3})(\w{0,1})$/, '$1.$2.$3-$4');
-  }
-  else if (value.match(/^(\d)(\d{3})(\d{0,2})$/)) {
-    value = value.replace(/^(\d)(\d{3})(\d{0,2})$/, '$1.$2.$3');
-  }
-  else if (value.match(/^(\d)(\d{0,2})$/)) {
-    value = value.replace(/^(\d)(\d{0,2})$/, '$1.$2');
-  }
-  this.value = value;
-});
+	// format rut
+	document.getElementById('rut').addEventListener('input', (e) => {
+    let rutFormateado = darFormatoRUT(e.target.value);
+    e.target.value = rutFormateado;
+  });
+
 }

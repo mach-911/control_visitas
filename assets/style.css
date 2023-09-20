@@ -12,6 +12,7 @@ nav {
 
 .table {
     box-shadow: 2px 2px 5px 1px;
+    position: relative;
 }
 .color {
     width: 18px;
@@ -68,4 +69,48 @@ i.peaton {
 .table th.fit {
     white-space: nowrap;
     width: 1%;
+}
+
+#context-menu {
+  position: fixed;
+  z-index: 10000;
+  width: 150px;
+  background: #1b1b1a;
+  border-radius: 8px;
+  overflow: hidden;
+  transform: scale(0);
+  transform-origin: top left;
+}
+#context-menu.active {
+  transform: scale(1);
+  transition: transform .1s ease-in-out;
+}
+
+#context-menu .item {
+  padding: 8px 10px;
+  font-size: 16px;
+  color: #eee;
+}
+
+#context-menu .item:hover {
+  background: #555;
+}
+
+#context-menu .item i {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+ /*DATE TIME STYLE*/
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: transparent;
+  background: 0 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: auto;
 }

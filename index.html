@@ -5,9 +5,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- bootstrap CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- selectize js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
     integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
   <link rel="stylesheet"
@@ -44,11 +46,13 @@
       </div>
     </div>
   </nav>
+  <!-- end navigation -->
 
-  <div class="container my-5">
+
+  <div class="container my-5" id="main_container">
     <h1 align="center" class="h3"></h1>
     <div class="d-flex justify-content-between" id="group-btn-add-and-reset">
-      <button id="btn_modal" class="btn btn-primary rounded-pill" onclick="{showModal(); document.getElementById('tipo_visita').value = '1'}">
+      <button id="btn_modal" class="btn btn-primary rounded-pill">
         <i class="fa fa-plus-circle fs-4"></i>
         <span>Visita</span>
       </button>
@@ -63,12 +67,12 @@
         <th class="fit"><i class="fa-solid fa-id-card-clip"></i> RUT</th>
         <th class="text-center fit"><i class="fa-solid fa-car"></i> PATENTE <span class="fw-light">|</span> COLOR</th>
         <th class="fit"><i class="fa-regular fa-building"></i> DEPTO</th>
-        <th><i class="fa-solid fa-clock"></i> INGRESO</th>
-        <th><i class="fa-solid fa-stopwatch"></i> HASTA</th>
+        <th class="fit"><i class="fa-solid fa-clock"></i> INGRESO</th>
+        <th class="fit"><i class="fa-solid fa-stopwatch"></i> HASTA</th>
         <th class="fit"><i class="fa-solid fa-hourglass-start"></i> RESTANTE</th>
       </thead>
       <tbody id="tbody-visita">
- <!--          <tr onclick="{ window.open(`https://www.rutificador.co/rut/buscar/?f=${'20.448.621-1'}`, '_blank', 'fullscreen=yes,menubar=no,location=no,scrollbars=no,resizable=1')}" style="cursor: pointer;">
+        <!--          <tr onclick="{ window.open(`https://www.rutificador.co/rut/buscar/?f=${'20.448.621-1'}`, '_blank', 'fullscreen=yes,menubar=no,location=no,scrollbars=no,resizable=1')}">
               <td>
                 <a href="#">eliminar</a>
                 <a href="#">editar</a>
@@ -90,28 +94,29 @@
             <td class="text-uppercase fw-medium">13/8/23, 1:36:00</td>
             <td class="text-uppercase fw-medium text-center">//</td>
             <td class="text-uppercase fw-medium text-center">//</td>
-        </tr>  -->
+        </tr> -->
       </tbody>
     </table>
-    <!-- POPUP -->
-    <dialog id="popup" class="w-100" style="z-index: 1;">
+
+    <!-- MODAL -->
+    <dialog id="modal" class="w-100" style="z-index: 1;">
       <div class="row justify-content-center">
         <div class="col-12 col-md-6 border card p-3">
           <div class="mb-3">
-            <button id="btn_popup" onclick="{popup.close(); document.getElementById('visita-form').reset()}" class="btn btn-danger"
+            <button id="btn_popup" onclick="{modal.close(); document.getElementById('visita-form').reset()}" class="btn btn-danger"
               style="top: -30px; z-index: 3">&times;</button>
           </div>
           <form action="" method="get" id="visita-form">
             <!-- RUT -->
             <div class="input-group mb-3 rounded shadow-sm">
               <label class="input-group-text bg-primary text-light" for="rut">rut</label>
-              <input type="text" id="rut" class="form-control" autocomplete="rut" placeholder="rut con digito verificador y sin puntos (Ej: 17797793-4)" required>
+              <input type="text" id="rut" class="form-control" autocomplete="rut" placeholder="rut con digito verificador y sin puntos (Ej: 12.345.678-9)" required>
               <button class="btn btn-secondary" onclick="rut.value=''">borrar</button>
             </div>
             <!-- NOMBRE -->
             <div class="input-group mb-3 rounded shadow-sm">
               <label class="input-group-text bg-primary text-light" for="nombre">nombre</label>
-              <input type="text" id="nombre" class="form-control" autocomplete="name" placeholder="Ej: Juan Peréz" required>
+              <input type="text" id="nombre" class="form-control" autocomplete="name" placeholder="Ej: Juan Peréz" style="text-transform: capitalize;" required>
               <button class="btn btn-secondary" onclick="nombre.value=''">borrar</button>
             </div>
             <!-- TIPO DE VISITA -->
@@ -126,11 +131,11 @@
             <div class="input-group mb-3 rounded shadow-sm d-none" id="div_patente">
               <label class="input-group-text bg-primary text-light" for="matricula">patente</label>
               <input type="text" minlength="6" maxlenght="6" id="matricula" class="form-control" autocomplete="on" placeholder="Ej: DC8L78">
-            </div>
+              <button class="btn btn-secondary rounded-end" onclick="matricula.value=''; matricula.focus()">borrar</button>
+              &nbsp;&nbsp;
             <!-- COLOR -->
-            <div class="input-group mb-3 d-none" id="div_color">
-              <label class="input-group-text bg-primary text-light" for="color">color</label>
-              <input type="color" id="color" list="colores" class="form-control form-control-color rounded-end">
+            <label class="input-group-text bg-primary text-light rounded-start" for="color">color</label>
+            <input type="color" id="color" list="colores" class="form-control form-control-color rounded-end">
             </div>
             <!-- DEPARTAMENTO -->
             <div class="input-group mb-3">
@@ -149,6 +154,7 @@
                 <option value="carabineros">Carabineros</option>
                 <option value="salud">Salud</option>
                 <option value="remodelación">Remodelación</option>
+                <option value="otro">Otro</option>
               </select>
             </div>
             <!-- INGRESO -->
@@ -184,21 +190,15 @@
       <option>#666666</option>
       <option>#AAAAAA</option>
     </datalist>
-
   </div>
+  <!-- FONT AWESOME -->
   <script src="https://kit.fontawesome.com/6b8f0c7049.js" crossorigin="anonymous"></script>
+  <!-- JS BOOTSTRAP -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
   <script>
 
-    const showModal = () => {
-      document.getElementById("popup").showModal();
-      const dt = new Date();
-      dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
-      // console.log(dt.toISOString().slice(0, 16)); // '2022-10-16T04:45'
-      document.getElementById("ingreso").value = dt.toISOString().slice(0, 16)
-    }
 
     document.getElementById('btn_modal').addEventListener('click', () => {
         document.querySelector("#div_patente").classList.add("d-none");

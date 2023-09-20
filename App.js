@@ -5,8 +5,6 @@ import { UI } from "./app/models/ui.js";
 import { Database } from "./app/db/database.js";
 
 
-
-
 function initApplication() {
     activate_events();
     cargarDepartamentos();

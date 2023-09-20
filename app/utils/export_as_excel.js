@@ -54,7 +54,7 @@ export function downloadAsExcel(data) {
 		border: headers_border
 	};
 
-	const workbook = { 
+	const workbook = {
 		Sheets: {
 			'visitas': worksheet
 		},
