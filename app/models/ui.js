@@ -107,6 +107,7 @@ export class UI {
       let params = `directories=no,scrollbars=0,resizable=1,status=0,location=no,toolbar=0,menubar=1,width=460,height=460,left=${left},top=${top}`;
       const popup = open('', '_blank', params);
       popup.focus()
+      popup.document.write(`<script src="https://kit.fontawesome.com/6b8f0c7049.js" crossorigin="anonymous"></script>`)
       popup.document.write(`
         <style>* {
           margin: 0;
@@ -117,14 +118,19 @@ export class UI {
          body {
           background: radial-gradient(#fff, #ddd 65%, #99bE9E 10%, #ddd);
           padding: 30px 0;
-          display: flex;
+          color: #292929;
           min-height: 100vh;
+         }
+
+         main {
+          display: flex;
           flex-flow: column nowrap;
           justify-content: center;
           align-items: center;
           gap: 10px;
-          color: #292929;
+          height: 100%;
          }
+
          hr {
           background: #ccc;
           border: 0;
@@ -144,18 +150,64 @@ export class UI {
          button.eliminar {
           background: #f74640;
          }
+         *[contenteditable='true']:hover {
+           background-color: rgba(0, 0, 0,0.2);
+           border-radius: 3px;
+          }
+
         </style>`)
       const db = new Database();
+      popup.document.write(`<main>`)
       popup.document.write(`<title>${visita.nombre}</title>`)
       popup.document.write(`<h1>${visita.motivo}</h1>`)
-      popup.document.write(`<h2 align='center'>${visita.nombre}</h2>`)
+      popup.document.write(`<div>`)
+      popup.document.write(`<h2><span contenteditable='true' id='nombre'>${visita.nombre}</span> <i class='fa fa-pencil'></i></h2>`)
+      popup.document.write(`</div>`)
       popup.document.write(`<hr>`)
       popup.document.write(`<h3>${visita.rut}</h3>`)
       popup.document.write(`<h3 id=${visita.matricula}></h3>`)
+      popup.document.write(`<i class='login'></i>`)
       popup.document.write(`<button type='button' class='close' onclick='window.close()'>Cerrar</button>`)
-      // popup.document.write(`<button type='button' class='eliminar'>Eliminar</button>`)
-      // popup.document.write(`<script>
-      //   document.querySelector('.eliminar').addEventListener('click', () => {
+      popup.document.write(`<button type='button' id='actualizar'>Actualizar</button>`)
+      popup.document.write(`</main>`)
+      popup.document.write(`<script>`)
+      popup.document.write(`
+        document.getElementById('nombre').focus();
+        const btn = document.getElementById('actualizar');
+        btn.addEventListener('click', () => {
+          const request = indexedDB.open('visitas', 1);
+
+          request.onsuccess = (event) => {
+            const db = event.target.result;
+            console.log(db);
+            let transaction = db.transaction(["visitas"], "readwrite");
+            let objectStore = transaction.objectStore("visitas")
+            console.log(transaction);
+            console.log(objectStore);
+            let cursorRequest = objectStore.openCursor();
+            cursorRequest.onsuccess = (e) => {
+              const cursor = e.target.result;
+              if (cursor){
+                if(cursor.value.rut === '${visita.rut}') {
+                  const updateData = cursor.value;
+                  console.log(updateData.nombre);
+                  updateData.nombre = document.getElementById('nombre').textContent;
+                  const request = cursor.update(updateData);
+                  request.onsuccess = (e) => {
+                    window.close();
+                    window.opener.location.reload();
+                  }
+                }
+                cursor.continue();
+              }
+            }
+          }
+        })
+
+
+      `)
+      popup.document.write(`</script>`)
+        // document.querySelector('.eliminar').addEventListener('click', () => {
       //     const request = indexedDB.open('visitas', 1);
       //         request.onsuccess = (event) => {
       //         const db = event.target.result;
@@ -180,8 +232,7 @@ export class UI {
       //         }
       //       }
       //     })
-      //   </script>`)
-
-    }
+     // </script>`)
+ }
 
 }

@@ -6,6 +6,29 @@ body {
     background-attachment: fixed;
 }
 
+/* New Simplified Version 6 CSS */
+/* Step 1: Common Properties: All required to make icons render reliably */
+.icon::before {
+  /* removed font- based rules */
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Step 2: Reference Individual Icons */
+.login::before {
+  /* using style CSS custom property */
+  font: var(--fa-font-solid);
+  content: "\f007";
+}
+
+/* Note: Make sure to include the correct weight and Unicode value for the icon */
+.tps::before {
+  /* using style CSS custom property */
+  font: var(--fa-font-solid);
+  content: "\f1ea";
+}
+
 nav {
   background: #33933320;
 }

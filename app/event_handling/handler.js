@@ -16,8 +16,9 @@ export function activate_events() {
       ingreso.min = dt.toISOString().slice(0, 11) + '00:00'
       ingreso.max = dt.toISOString().slice(0, 16)
   })
+
   document.getElementById('nombre').oninput = (e) => {
-    e.target.value = e.target.value.toLowerCase();
+    let val = e.target.value.toLowerCase();
   }
 
 	document.getElementById('visita-form')
